@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Claude Pulse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow:hidden}
+
+:root{
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --sans:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+}
+
+/* ==== THEMES (light) ==== */
+body.theme-copper{
+  --bg:#F6E6D4; --bg2:#EBD0B4; --ink:#2A1810; --ink2:#6B4A36; --ink3:#A07858;
+  --accent:#C1714F; --accent2:#8A3F1E; --accent-soft:#F3D4BF;
+  --track:rgba(42,24,16,0.08); --line:rgba(42,24,16,0.14);
+  --slab:#FFF8F0; --slab2:#F0E2CE;
+  --ok:#4A7C44; --warn:#C7833A; --bad:#B8382B;
+}
+body.theme-ocean{
+  --bg:#DFEBF5; --bg2:#C3D7E8; --ink:#0D2238; --ink2:#3F5E7E; --ink3:#6B89A8;
+  --accent:#2E6FA4; --accent2:#1A4773; --accent-soft:#BFD7ED;
+  --track:rgba(13,34,56,0.08); --line:rgba(13,34,56,0.14);
+  --slab:#F4F8FC; --slab2:#DDE8F1;
+  --ok:#3A7A6B; --warn:#C78A3A; --bad:#B8382B;
+}
+body.theme-forest{
+  --bg:#E2EEDB; --bg2:#C6DBBA; --ink:#122818; --ink2:#3F6243; --ink3:#6B8B6D;
+  --accent:#3D7A3D; --accent2:#255225; --accent-soft:#CCE0C4;
+  --track:rgba(18,40,24,0.08); --line:rgba(18,40,24,0.14);
+  --slab:#F4F8EE; --slab2:#DCE9D3;
+  --ok:#3D7A3D; --warn:#C7833A; --bad:#B8382B;
+}
+body.theme-purple{
+  --bg:#EADDF3; --bg2:#D6C0E5; --ink:#25123D; --ink2:#5C3F7E; --ink3:#8B70A8;
+  --accent:#6F3DA4; --accent2:#472573; --accent-soft:#DAC8EA;
+  --track:rgba(37,18,61,0.08); --line:rgba(37,18,61,0.14);
+  --slab:#F8F2FC; --slab2:#E4D5F1;
+  --ok:#4A7C44; --warn:#C7833A; --bad:#B8382B;
+}
+body.theme-mono{
+  --bg:#E4E4E4; --bg2:#CDCDCD; --ink:#0A0A0A; --ink2:#4A4A4A; --ink3:#7A7A7A;
+  --accent:#1A1A1A; --accent2:#000; --accent-soft:#D4D4D4;
+  --track:rgba(0,0,0,0.08); --line:rgba(0,0,0,0.14);
+  --slab:#F7F7F7; --slab2:#DADADA;
+  --ok:#3D6B3D; --warn:#A06A2A; --bad:#9A2F24;
+}
+
+/* ==== THEMES (dark) ==== */
+body.dark.theme-copper{
+  --bg:#140B06; --bg2:#241612; --ink:#F5E6D4; --ink2:#C8A890; --ink3:#A08872;
+  --accent:#E89870; --accent2:#FFB489; --accent-soft:#3A2418;
+  --track:rgba(245,230,212,0.08); --line:rgba(245,230,212,0.12);
+  --slab:#1C120C; --slab2:#2A1C14;
+  --ok:#7DC175; --warn:#E8B070; --bad:#E87065;
+}
+body.dark.theme-ocean{
+  --bg:#060D14; --bg2:#0F1C2A; --ink:#DCEAF4; --ink2:#8FABC4; --ink3:#6886A0;
+  --accent:#5A9FD4; --accent2:#8ABEE6; --accent-soft:#1A2E42;
+  --track:rgba(220,234,244,0.08); --line:rgba(220,234,244,0.12);
+  --slab:#0B1520; --slab2:#13212F;
+  --ok:#6DB8A3; --warn:#E8B070; --bad:#E87065;
+}
+body.dark.theme-forest{
+  --bg:#07120A; --bg2:#0F2014; --ink:#D8EDD8; --ink2:#95BE97; --ink3:#6F9871;
+  --accent:#6FBF70; --accent2:#95DC95; --accent-soft:#173020;
+  --track:rgba(216,237,216,0.08); --line:rgba(216,237,216,0.12);
+  --slab:#0D1A10; --slab2:#152517;
+  --ok:#6FBF70; --warn:#E8B070; --bad:#E87065;
+}
+body.dark.theme-purple{
+  --bg:#0E0714; --bg2:#1C0F28; --ink:#EED8F4; --ink2:#BB94CC; --ink3:#8E6AA0;
+  --accent:#BF70D4; --accent2:#DC95EC; --accent-soft:#2C1A3E;
+  --track:rgba(238,216,244,0.08); --line:rgba(238,216,244,0.12);
+  --slab:#120A1A; --slab2:#1D1228;
+  --ok:#7DC175; --warn:#E8B070; --bad:#E87065;
+}
+body.dark.theme-mono{
+  --bg:#0A0A0A; --bg2:#1A1A1A; --ink:#EFEFEF; --ink2:#A8A8A8; --ink3:#777;
+  --accent:#E8E8E8; --accent2:#FFF; --accent-soft:#242424;
+  --track:rgba(239,239,239,0.08); --line:rgba(239,239,239,0.12);
+  --slab:#111; --slab2:#181818;
+  --ok:#7DC175; --warn:#E8B070; --bad:#E87065;
+}
+
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--ink);
+  padding:0;
+  min-width:300px;max-width:340px;
+  width:320px;
+  transition:background .3s ease, color .3s ease;
+  position:relative;
+}
+
+/* Subtle dotted backdrop */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(var(--line) 1px,transparent 1px);
+  background-size:14px 14px;
+  mask-image:linear-gradient(180deg,black 0%,transparent 80%);
+  -webkit-mask-image:linear-gradient(180deg,black 0%,transparent 80%);
+  opacity:.5;
+}
+
+#app{position:relative;z-index:1;display:flex;flex-direction:column}
+
+/* ==== TOP CHROME ==== */
+.chrome{
+  padding:10px 12px 8px;
+  -webkit-app-region:drag;
+  border-bottom:1px solid var(--line);
+}
+.chrome-top{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  cursor:move;
+}
+.brand{display:flex;align-items:center;gap:7px;min-width:0}
+.logo{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--accent);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;flex-shrink:0;
+  box-shadow:0 2px 0 var(--accent2);
+}
+.logo::after{
+  content:"";position:absolute;inset:4px;border-radius:2px;
+  border:1.5px solid var(--bg);
+  border-left:1.5px solid transparent;border-right:1.5px solid transparent;
+  animation:logoPulse 2s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(0.75);opacity:.5}
+}
+.brand-name{
+  font-family:var(--mono);font-weight:700;font-size:12px;
+  letter-spacing:.02em;text-transform:uppercase;line-height:1;
+  display:flex;flex-direction:column;gap:2px;
+}
+.brand-name b{letter-spacing:.06em}
+.brand-name small{font-size:8.5px;font-weight:500;color:var(--ink3);letter-spacing:.18em;white-space:nowrap}
+.plan-inline{
+  display:inline-block;font-weight:700;
+  padding:1px 5px;
+  background:var(--ink);color:var(--bg);
+  border-radius:3px;letter-spacing:.05em;
+  font-size:8.5px;
+  vertical-align:baseline;
+}
+
+.status{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:10px;color:var(--ink2);
+  -webkit-app-region:no-drag;
+  padding:3px 7px;border:1px solid var(--line);border-radius:999px;
+  background:var(--slab);
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--ok);
+  box-shadow:0 0 0 0 var(--ok);
+  animation:ping 1.8s ease-out infinite;
+}
+.live-dot.err{background:var(--bad);animation:none}
+@keyframes ping{
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}
+  70%{box-shadow:0 0 0 6px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+.sync-t{font-variant-numeric:tabular-nums}
+
+.chrome-row2{
+  display:flex;align-items:center;gap:6px;margin-top:8px;
+  -webkit-app-region:no-drag;
+}
+.profile-sel{
+  flex:1;min-width:0;position:relative;
+  background:var(--slab);border:1px solid var(--line);border-radius:8px;
+  padding:0;
+}
+.profile-sel::after{
+  content:"";position:absolute;right:10px;top:50%;pointer-events:none;
+  width:6px;height:6px;border-right:1.5px solid var(--ink2);border-bottom:1.5px solid var(--ink2);
+  transform:translateY(-70%) rotate(45deg);
+}
+.profile-sel select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  width:100%;background:transparent;border:none;
+  padding:5px 22px 5px 26px;font-family:var(--sans);font-size:11px;
+  color:var(--ink);cursor:pointer;outline:none;font-weight:500;
+  text-overflow:ellipsis;
+}
+.profile-sel::before{
+  content:"";position:absolute;left:9px;top:50%;transform:translateY(-50%);
+  width:12px;height:12px;border-radius:50%;
+  background:var(--accent);
+}
+.plan-tag{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.08em;padding:4px 7px;border-radius:6px;
+  background:var(--ink);color:var(--bg);
+  white-space:nowrap;
+}
+
+.actions{display:flex;gap:2px;-webkit-app-region:no-drag}
+.ibtn{
+  background:transparent;border:1px solid transparent;cursor:pointer;
+  padding:5px;color:var(--ink2);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.ibtn svg{width:13px;height:13px;display:block}
+.ibtn:hover{color:var(--ink);background:var(--slab);border-color:var(--line)}
+.ibtn.active{color:var(--accent);background:var(--accent-soft);border-color:var(--line)}
+.ibtn.close-btn:hover{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+
+/* ==== HERO METER ==== */
+.hero{
+  padding:14px 12px 10px;
+  position:relative;
+}
+.hero-topline{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  font-family:var(--mono);font-size:9px;color:var(--ink3);
+  letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.hero-topline .m-sel{
+  color:var(--accent);font-weight:700;
+}
+
+.meter{
+  position:relative;
+  display:grid;grid-template-columns:128px 1fr;gap:14px;align-items:center;
+}
+.dial{position:relative;width:128px;height:128px;flex-shrink:0}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dial-bg{
+  stroke:var(--track);
+}
+.dial-fg{
+  stroke-linecap:round;
+  transition:stroke-dashoffset .8s cubic-bezier(.2,.9,.3,1.2), stroke .3s;
+}
+.dial-ticks{position:absolute;inset:0;pointer-events:none}
+.dial-ticks::before{
+  content:"";position:absolute;inset:16px;border-radius:50%;
+  border:1px dashed var(--line);
+}
+.dial-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+}
+.pct{
+  font-family:var(--mono);font-weight:700;font-size:30px;line-height:1;
+  letter-spacing:-.02em;color:var(--ink);
+  display:flex;align-items:baseline;gap:1px;
+  font-variant-numeric:tabular-nums;
+}
+.pct .unit{font-size:13px;color:var(--ink2);font-weight:500}
+.pct-label{
+  font-family:var(--mono);font-size:8.5px;margin-top:5px;
+  letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;
+}
+
+.meter-info{min-width:0;display:flex;flex-direction:column;gap:8px}
+.meter-title{
+  font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.01em;
+  display:flex;align-items:center;gap:6px;color:var(--ink);
+}
+.meter-title .arrow{color:var(--accent);flex-shrink:0}
+.reset-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:10px;color:var(--ink2);
+  padding:4px 8px;background:var(--slab);border:1px solid var(--line);
+  border-radius:999px;align-self:flex-start;
+}
+.reset-pill .d{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.pred{
+  font-family:var(--mono);font-size:10px;color:var(--ink2);
+  background:var(--accent-soft);border-left:2px solid var(--accent);
+  padding:6px 8px;border-radius:0 6px 6px 0;line-height:1.35;
+  display:none;
+}
+.pred.show{display:block}
+
+/* segmented selector */
+.seg{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:2px;
+  background:var(--slab2);border:1px solid var(--line);border-radius:8px;
+  padding:2px;margin:10px 0 0;-webkit-app-region:no-drag;
+}
+.seg button{
+  background:transparent;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 2px;border-radius:6px;color:var(--ink2);
+  transition:all .15s;
+}
+.seg button:hover{color:var(--ink)}
+.seg button.active{background:var(--bg);color:var(--accent);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+/* ==== METRIC ROWS ==== */
+.rows-wrap{padding:8px 12px 2px}
+.rows-head{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:9px;color:var(--ink3);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;
+}
+.rows-head::after{
+  content:"";flex:1;height:1px;background:var(--line);
+}
+
+.row{
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+  padding:7px 4px;border-bottom:1px dashed var(--line);cursor:pointer;
+  -webkit-app-region:no-drag;transition:background .15s;
+}
+.row:last-child{border-bottom:none}
+.row:hover{background:var(--slab)}
+.row.active{background:var(--slab)}
+
+.row-left{display:flex;align-items:center;gap:9px;min-width:0}
+.mini-bar{
+  width:36px;height:22px;flex-shrink:0;position:relative;
+  display:flex;align-items:flex-end;gap:2px;
+}
+.mini-bar i{
+  flex:1;background:var(--ink3);opacity:.3;border-radius:1px;
+  transition:all .4s;
+}
+.row.active .mini-bar i{opacity:1;background:var(--accent)}
+.row-body{min-width:0;flex:1}
+.row-label{
+  font-size:12px;font-weight:600;color:var(--ink);letter-spacing:-.005em;
+  display:flex;align-items:center;gap:6px;
+}
+.row-label .tag{
+  font-family:var(--mono);font-size:8px;font-weight:700;padding:1px 4px;
+  border-radius:3px;background:var(--slab2);color:var(--ink2);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.row-sub{font-family:var(--mono);font-size:9.5px;color:var(--ink3);margin-top:1px}
+
+.row-right{text-align:right}
+.row-pct{
+  font-family:var(--mono);font-size:14px;font-weight:700;
+  color:var(--ink);font-variant-numeric:tabular-nums;
+  line-height:1;
+}
+.row-pct.warn{color:var(--warn)}
+.row-pct.bad{color:var(--bad)}
+.row-pct.ok{color:var(--ok)}
+.row-trend{
+  font-family:var(--mono);font-size:9px;color:var(--ink3);margin-top:2px;
+}
+
+/* ==== MONTHLY SPEND CARD ==== */
+.spend{
+  margin:8px 12px 12px;padding:10px 12px;
+  background:var(--slab);border:1px solid var(--line);border-radius:10px;
+  position:relative;overflow:hidden;
+}
+.spend::before{
+  content:"";position:absolute;top:0;right:0;width:40px;height:40px;
+  background:repeating-linear-gradient(135deg,var(--line) 0 1px,transparent 1px 6px);
+  opacity:.5;
+}
+.spend-head{
+  display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;
+}
+.spend-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+  color:var(--ink3);text-transform:uppercase;
+}
+.spend-val{
+  font-family:var(--mono);font-weight:700;font-size:16px;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.spend-val .limit{font-size:11px;font-weight:500;color:var(--ink3);margin-left:2px}
+.bar-wrap{
+  height:8px;background:var(--bg2);border-radius:3px;overflow:hidden;
+  border:1px solid var(--line);position:relative;
+}
+.bar{
+  height:100%;background:var(--accent);border-radius:2px;
+  transition:width .6s cubic-bezier(.2,.9,.3,1);
+  background-image:repeating-linear-gradient(45deg,transparent 0 6px,rgba(255,255,255,.18) 6px 7px);
+}
+.spend-foot{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:6px;font-family:var(--mono);font-size:9px;color:var(--ink3);
+  letter-spacing:.08em;
+}
+.spend-foot .days-left{color:var(--ink2);font-weight:600}
+
+/* ==== HISTORY CARD ==== */
+.history-card{
+  margin:0 12px 12px;padding:10px 12px;
+  background:var(--slab);border:1px solid var(--line);border-radius:10px;
+  display:none;
+}
+.history-card.show{display:block}
+.history-head{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;
+}
+.history-title{
+  font-family:var(--mono);font-size:9px;color:var(--ink3);
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.history-legend{display:flex;gap:10px;font-family:var(--mono);font-size:9px;color:var(--ink2)}
+.legend-dot{display:inline-block;width:8px;height:2px;margin-right:4px;vertical-align:middle;border-radius:1px}
+.history-svg{width:100%;height:60px;display:block}
+.history-empty{
+  font-family:var(--mono);font-size:10px;color:var(--ink3);
+  text-align:center;padding:18px 0;
+}
+
+/* ==== WARN BANNER ==== */
+.warn{
+  margin:0 12px 8px;padding:9px 11px;cursor:pointer;
+  background:color-mix(in srgb,var(--bad) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--bad) 35%,transparent);
+  border-radius:8px;color:var(--bad);font-size:11px;
+  display:none;align-items:center;gap:8px;
+  -webkit-app-region:no-drag;
+}
+.warn.show{display:flex}
+.warn-icon{width:14px;height:14px;flex-shrink:0}
+
+/* ==== THEME PICKER ==== */
+.theme-picker{
+  position:absolute;top:96px;right:10px;z-index:50;
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:6px;display:none;flex-direction:column;gap:2px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  -webkit-app-region:no-drag;min-width:130px;
+}
+.theme-picker.show{display:flex}
+.theme-swatch{
+  display:flex;align-items:center;gap:8px;padding:6px 9px;
+  font-family:var(--mono);font-size:10px;cursor:pointer;border-radius:6px;
+  color:var(--ink2);text-transform:uppercase;letter-spacing:.1em;
+}
+.theme-swatch:hover{background:var(--slab);color:var(--ink)}
+.theme-swatch.active{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.sw-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--line)}
+
+/* ==== COMPACT MODE ==== */
+body.compact{width:240px;min-width:220px;max-width:260px}
+body.compact .chrome{padding:8px 10px 6px}
+body.compact .chrome-row2,
+body.compact .rows-wrap,
+body.compact .spend,
+body.compact .history-card,
+body.compact .seg,
+body.compact .pred,
+body.compact .reset-pill,
+body.compact .warn{display:none !important}
+body.compact .plan-inline{display:none}
+body.compact .brand-name small{letter-spacing:.12em}
+body.compact .hero{padding:8px 10px 10px}
+body.compact .hero-topline{margin-bottom:4px}
+body.compact .meter{grid-template-columns:52px 1fr;gap:10px}
+body.compact .dial{width:52px;height:52px}
+body.compact .meter-info{gap:2px}
+body.compact .meter-title{font-size:10px}
+
+/* Compact-only mini reset pill (inline under the meter title) */
+.meter-compact-reset{display:none}
+body.compact .meter-compact-reset{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  color:var(--ink2);letter-spacing:.05em;
+  padding:2px 6px;background:var(--slab);border:1px solid var(--line);border-radius:999px;
+  align-self:flex-start;margin-top:2px;
+}
+body.compact .meter-compact-reset .d{
+  width:4px;height:4px;border-radius:50%;background:var(--accent);
+}
+body.compact .pct{font-size:14px}
+body.compact .pct .unit{font-size:8px}
+body.compact .pct-label{display:none}
+body.compact .dial-ticks::before{display:none}
+
+/* Compact: status pill smaller and positioned to leave room for the controls */
+body.compact .status{font-size:9px;padding:2px 6px}
+
+/* Compact controls bar: top-right corner, two stacked round buttons */
+.compact-controls{display:none}
+body.compact .compact-controls{
+  display:flex;gap:4px;
+  position:absolute;top:6px;right:6px;
+  z-index:60;-webkit-app-region:no-drag;
+}
+body.compact .compact-controls .cbtn{
+  display:flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;padding:0;
+  background:var(--slab);border:1px solid var(--line);cursor:pointer;
+  color:var(--ink2);
+}
+body.compact .compact-controls .cbtn:hover{color:var(--ink);background:var(--bg2)}
+body.compact .compact-controls .cbtn.close-x:hover{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+body.compact .compact-controls .cbtn svg{width:9px;height:9px}
+
+/* In compact mode, hide the status pill on the right (it would overlap controls) */
+body.compact .chrome-top .status{display:none}
+
+/* Compact: hide the verbose CLAUDE · v1.0 · MAX subtitle, show just the time */
+body.compact .brand-name small{font-size:0;letter-spacing:0;line-height:1}
+body.compact .brand-name small::before{
+  content:attr(data-time);
+  font-family:var(--mono);font-size:9px;font-weight:600;
+  color:var(--ink2);letter-spacing:.05em;
+}
+
+/* ==== MODAL ==== */
+.modal-backdrop{
+  position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 65%,transparent);
+  display:none;align-items:center;justify-content:center;z-index:200;
+  -webkit-app-region:no-drag;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  padding:10px;
+}
+.modal-backdrop.show{display:flex}
+.modal{
+  background:var(--bg);border:1px solid var(--line);border-radius:14px;
+  padding:16px;width:100%;max-width:310px;max-height:96%;
+  overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+.modal::-webkit-scrollbar{width:6px}
+.modal::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.modal h2{
+  font-family:var(--sans);font-size:15px;font-weight:700;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.modal h2 .kbd{
+  font-family:var(--mono);font-size:9px;background:var(--slab);
+  border:1px solid var(--line);color:var(--ink2);
+  padding:2px 6px;border-radius:4px;letter-spacing:.08em;
+  font-weight:500;
+}
+.modal-tabs{
+  display:flex;gap:0;margin-bottom:14px;
+  background:var(--slab);border-radius:8px;padding:3px;
+}
+.modal-tab{
+  flex:1;text-align:center;padding:6px 8px;font-size:11px;
+  color:var(--ink2);cursor:pointer;border-radius:6px;
+  font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase;font-weight:600;
+  transition:all .15s;
+}
+.modal-tab:hover{color:var(--ink)}
+.modal-tab.active{color:var(--ink);background:var(--bg);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.modal-field{margin-bottom:11px}
+.modal-field label{
+  display:block;font-family:var(--mono);font-size:9px;color:var(--ink2);
+  margin-bottom:5px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;
+}
+.modal-field input{
+  width:100%;font-size:11px;padding:8px 10px;
+  background:var(--slab);border:1px solid var(--line);border-radius:7px;
+  color:var(--ink);font-family:var(--mono);outline:none;transition:border-color .15s;
+}
+.modal-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.modal-hint{font-family:var(--mono);font-size:9px;color:var(--ink3);margin-top:4px;line-height:1.5}
+.modal-hint code{
+  font-size:9px;background:var(--slab2);padding:1px 4px;border-radius:3px;
+  word-break:break-all;display:inline-block;margin-top:2px;color:var(--ink);
+}
+.modal-status{font-family:var(--mono);font-size:10px;padding:7px 9px;border-radius:6px;margin-bottom:10px;display:none}
+.modal-status.ok{display:block;background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.modal-status.err{display:block;background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.modal-buttons{display:flex;gap:6px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.modal-btn{
+  font-family:var(--sans);font-size:11px;font-weight:600;padding:7px 12px;
+  border-radius:7px;border:1px solid var(--line);background:var(--slab);
+  color:var(--ink);cursor:pointer;transition:all .15s;
+}
+.modal-btn:hover{background:var(--bg2)}
+.modal-btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.modal-btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+
+/* Hero login button */
+.login-hero{
+  background:var(--ink);color:var(--bg);border-radius:10px;padding:14px;
+  text-align:left;margin-bottom:12px;cursor:pointer;border:none;width:100%;
+  font-family:var(--sans);transition:all .15s;
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.login-hero::before{
+  content:"";position:absolute;top:0;right:0;bottom:0;width:60%;
+  background:repeating-linear-gradient(135deg,transparent 0 8px,color-mix(in srgb,var(--bg) 10%,transparent) 8px 10px);
+  pointer-events:none;
+}
+.login-hero:hover{background:var(--accent2)}
+.login-hero-icon{
+  width:36px;height:36px;border-radius:8px;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  color:var(--bg);position:relative;z-index:1;
+}
+.login-hero-icon svg{width:18px;height:18px}
+.login-hero-text{flex:1;position:relative;z-index:1;min-width:0;text-align:left}
+.login-hero-title{font-size:13px;font-weight:700;margin-bottom:2px}
+.login-hero-sub{font-size:10px;opacity:.8;font-family:var(--mono)}
+
+.login-divider{
+  text-align:center;font-family:var(--mono);font-size:9px;color:var(--ink3);
+  margin:12px 0;text-transform:uppercase;letter-spacing:.14em;position:relative;
+}
+.login-divider::before,.login-divider::after{
+  content:"";position:absolute;top:50%;width:38%;height:1px;background:var(--line);
+}
+.login-divider::before{left:0}
+.login-divider::after{right:0}
+
+.login-progress{
+  padding:10px;background:var(--accent-soft);border-radius:8px;
+  margin-bottom:10px;display:flex;align-items:center;gap:9px;
+}
+.login-progress.err{background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.login-progress.ok{background:color-mix(in srgb,var(--ok) 15%,transparent)}
+.login-spin{
+  width:14px;height:14px;border:2px solid var(--accent);
+  border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-progress-text{font-family:var(--mono);font-size:10px;color:var(--ink)}
+
+.welcome{text-align:center;padding:6px 4px 4px}
+.welcome h3{font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.welcome p{font-size:11px;color:var(--ink2);margin-bottom:14px;line-height:1.5}
+
+.profile-list{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.profile-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 11px;background:var(--slab);border:1px solid var(--line);
+  border-radius:8px;font-size:11px;font-weight:600;
+}
+.profile-item.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.profile-actions{display:flex;gap:2px}
+.profile-actions button{
+  background:none;border:none;cursor:pointer;padding:4px 6px;
+  font-size:12px;color:inherit;opacity:.6;border-radius:4px;
+}
+.profile-actions button:hover{opacity:1;background:var(--bg2)}
+
+details{margin-top:6px;border:1px dashed var(--line);border-radius:8px;padding:0 10px}
+details summary{
+  font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;
+  padding:8px 0;user-select:none;letter-spacing:.08em;text-transform:uppercase;
+}
+details summary:hover{color:var(--ink)}
+details[open] summary{margin-bottom:6px;color:var(--ink);font-weight:700}
+details[open]{padding-bottom:6px}
+
+/* About tab */
+.about-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.about-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 10px;background:var(--slab);border-radius:7px;font-size:11px;
+}
+.about-row .k{font-family:var(--mono);color:var(--ink3);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.about-row .v{color:var(--ink);font-family:var(--mono);font-size:10px}
+
+/* Startup / autostart card */
+.startup-card{
+  background:var(--accent-soft);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;margin-bottom:10px;position:relative;overflow:hidden;
+  transition:opacity .2s;
+}
+.startup-card.disabled{opacity:.55}
+.startup-card.disabled .tgl{cursor:not-allowed}
+
+/* Tray tip card */
+.tray-tip-card{
+  background:var(--slab);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;margin-bottom:10px;
+}
+.tray-tip-title{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.005em}
+.tray-tip-body{font-family:var(--mono);font-size:9.5px;color:var(--ink2);line-height:1.5}
+.tray-tip-steps{margin:4px 0 0 16px;padding:0;color:var(--ink2)}
+.tray-tip-steps li{margin-bottom:2px}
+.startup-card::before{
+  content:"";position:absolute;top:0;right:0;bottom:0;width:60px;
+  background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--accent) 8%,transparent) 6px 7px);
+  pointer-events:none;
+}
+.startup-row{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  position:relative;z-index:1;
+}
+.startup-text{min-width:0;flex:1}
+.startup-title{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:-.005em}
+.startup-sub{font-family:var(--mono);font-size:9px;color:var(--ink2);margin-top:2px;line-height:1.4}
+
+/* Toggle switch */
+.tgl{position:relative;display:inline-block;cursor:pointer;flex-shrink:0}
+.tgl input{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+.tgl-track{
+  display:block;width:36px;height:20px;border-radius:999px;
+  background:var(--slab2);border:1px solid var(--line);
+  transition:background .2s,border-color .2s;
+}
+.tgl-thumb{
+  position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+  background:var(--ink2);transition:transform .2s,background .2s;
+}
+.tgl input:checked ~ .tgl-track{background:var(--accent);border-color:var(--accent)}
+.tgl input:checked ~ .tgl-track .tgl-thumb{transform:translateX(16px);background:var(--bg)}
+.tgl:hover .tgl-track{border-color:var(--ink3)}
+</style>
+</head>
+<body class="theme-copper">
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20V6M3 20h18M7 16l4-4 4 4 5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-compact" viewBox="0 0 24 24"><path d="M4 10h16M4 14h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c1 0 1.5-.5 1.5-1.2 0-.4-.2-.7-.4-1-.3-.3-.4-.6-.4-1 0-.8.6-1.4 1.4-1.4H16c3.3 0 6-2.7 6-6 0-5.5-4.5-9.4-10-9.4z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="11" cy="6.5" r="1.3" fill="currentColor"/><circle cx="16" cy="7.5" r="1.3" fill="currentColor"/><circle cx="17.5" cy="12.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 2L2 21h20L12 2zM12 9v5M12 17v1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+
+  <!-- TOP CHROME -->
+  <div class="chrome">
+    <div class="chrome-top">
+      <div class="brand">
+        <div class="logo"></div>
+        <div class="brand-name">
+          <b>Pulse</b>
+          <small>CLAUDE &middot; v1.0 &middot; <span class="plan-inline" id="plan">MAX 5&times;</span></small>
+        </div>
+      </div>
+      <div class="status">
+        <div class="live-dot" id="dot"></div>
+        <span class="sync-t" id="sync">--:--</span>
+      </div>
+    </div>
+
+    <div class="chrome-row2">
+      <div class="profile-sel">
+        <select id="profileSel"><option>Personal</option></select>
+      </div>
+      <div class="actions">
+        <button class="ibtn" id="historyBtn" title="History"><svg><use href="#i-chart"/></svg></button>
+        <button class="ibtn" id="compactBtn" title="Compact"><svg><use href="#i-compact"/></svg></button>
+        <button class="ibtn" id="settingsBtn" title="Settings"><svg><use href="#i-settings"/></svg></button>
+        <button class="ibtn" id="themeBtn" title="Theme"><svg><use href="#i-palette"/></svg></button>
+        <button class="ibtn" id="darkBtn" title="Dark mode"><svg id="darkIcon"><use href="#i-moon"/></svg></button>
+        <button class="ibtn close-btn" id="closeBtn" title="Close"><svg><use href="#i-close"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WARN -->
+  <div class="warn" id="warn" onclick="openSettings()">
+    <svg class="warn-icon"><use href="#i-warn"/></svg>
+    <span id="warnText">Session expired &mdash; click to re-authenticate</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-topline">
+      <span>TELEMETRY</span>
+      <span>NOW &middot; <span class="m-sel" id="selName">SESSION</span></span>
+    </div>
+
+    <div class="meter">
+      <div class="dial">
+        <svg viewBox="0 0 140 140">
+          <circle class="dial-bg" cx="70" cy="70" r="58" fill="none" stroke-width="10"/>
+          <circle class="dial-fg" id="bar" cx="70" cy="70" r="58" fill="none"
+                  stroke="var(--accent)" stroke-width="10"
+                  stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+        </svg>
+        <div class="dial-ticks"></div>
+        <div class="dial-center">
+          <div class="pct"><span id="num">--</span><span class="unit">%</span></div>
+          <div class="pct-label" id="lbl">session</div>
+        </div>
+      </div>
+
+      <div class="meter-info">
+        <div class="meter-title"><svg class="arrow" width="12" height="12"><use href="#i-arrow"/></svg><span id="heroTitle">5-hour session</span></div>
+        <div class="meter-compact-reset" id="compactReset"><span class="d"></span><span id="compactResetTxt">--</span></div>
+        <div class="reset-pill" id="resetPill"><span class="d"></span><span>resets in <b id="resetTxt">--</b></span></div>
+        <div class="pred" id="pred"></div>
+      </div>
+    </div>
+
+    <div class="seg" id="seg">
+      <button data-k="session" class="active">Session</button>
+      <button data-k="allModels">Week</button>
+      <button data-k="sonnetOnly">Sonnet</button>
+      <button data-k="claudeDesign">Design</button>
+      <button data-k="monthly">&euro;/mo</button>
+    </div>
+  </div>
+
+  <!-- ROWS -->
+  <div class="rows-wrap">
+    <div class="rows-head">Limits &middot; all streams</div>
+
+    <div class="row" data-k="session">
+      <div class="row-left">
+        <div class="mini-bar" data-bar="session"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="row-body">
+          <div class="row-label">Session <span class="tag">5h</span></div>
+          <div class="row-sub" id="rs-session">--</div>
+        </div>
+      </div>
+      <div class="row-right">
+        <div class="row-pct" id="rp-session">--</div>
+        <div class="row-trend" id="rt-session"></div>
+      </div>
+    </div>
+
+    <div class="row" data-k="allModels">
+      <div class="row-left">
+        <div class="mini-bar" data-bar="allModels"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="row-body">
+          <div class="row-label">Weekly all <span class="tag">7d</span></div>
+          <div class="row-sub" id="rs-allModels">--</div>
+        </div>
+      </div>
+      <div class="row-right">
+        <div class="row-pct" id="rp-allModels">--</div>
+        <div class="row-trend" id="rt-allModels"></div>
+      </div>
+    </div>
+
+    <div class="row" data-k="sonnetOnly">
+      <div class="row-left">
+        <div class="mini-bar" data-bar="sonnetOnly"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="row-body">
+          <div class="row-label">Sonnet <span class="tag">7d</span></div>
+          <div class="row-sub" id="rs-sonnetOnly">--</div>
+        </div>
+      </div>
+      <div class="row-right">
+        <div class="row-pct" id="rp-sonnetOnly">--</div>
+        <div class="row-trend" id="rt-sonnetOnly"></div>
+      </div>
+    </div>
+
+    <div class="row" data-k="claudeDesign">
+      <div class="row-left">
+        <div class="mini-bar" data-bar="claudeDesign"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="row-body">
+          <div class="row-label">Claude Design <span class="tag">7d</span></div>
+          <div class="row-sub" id="rs-claudeDesign">--</div>
+        </div>
+      </div>
+      <div class="row-right">
+        <div class="row-pct" id="rp-claudeDesign">--</div>
+        <div class="row-trend" id="rt-claudeDesign"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPEND -->
+  <div class="spend">
+    <div class="spend-head">
+      <span class="spend-label">Monthly spend</span>
+      <span class="spend-val" id="m-spent">&euro;0.00<span class="limit"> / &euro;0</span></span>
+    </div>
+    <div class="bar-wrap"><div class="bar" id="m-bar" style="width:0%"></div></div>
+    <div class="spend-foot">
+      <span id="m-pace">PACE &middot; --</span>
+      <span class="days-left" id="m-days">--</span>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-card" id="historyCard">
+    <div class="history-head">
+      <span class="history-title">7-day trace</span>
+      <span class="history-legend">
+        <span><span class="legend-dot" style="background:var(--accent)"></span>session</span>
+        <span><span class="legend-dot" style="background:var(--ink2)"></span>weekly</span>
+      </span>
+    </div>
+    <svg class="history-svg" id="historySvg" viewBox="0 0 240 60" preserveAspectRatio="none"></svg>
+    <div class="history-empty" id="historyEmpty" style="display:none">Collecting &middot; first point ~5 min</div>
+  </div>
+
+</div>
+
+<div class="compact-controls">
+  <button class="cbtn" id="compactExitBtn" title="Expand"><svg><use href="#i-expand"/></svg></button>
+  <button class="cbtn close-x" id="compactCloseBtn" title="Hide"><svg><use href="#i-close"/></svg></button>
+</div>
+
+<!-- THEME PICKER -->
+<div class="theme-picker" id="themePicker">
+  <div class="theme-swatch" data-theme="copper"><div class="sw-dot" style="background:#C1714F"></div>Copper</div>
+  <div class="theme-swatch" data-theme="ocean"><div class="sw-dot" style="background:#2E6FA4"></div>Ocean</div>
+  <div class="theme-swatch" data-theme="forest"><div class="sw-dot" style="background:#3D7A3D"></div>Forest</div>
+  <div class="theme-swatch" data-theme="purple"><div class="sw-dot" style="background:#6F3DA4"></div>Purple</div>
+  <div class="theme-swatch" data-theme="mono"><div class="sw-dot" style="background:#1A1A1A"></div>Mono</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2 id="modalTitle">Settings</h2>
+
+    <!-- WELCOME (first run, no profiles) -->
+    <div class="tab-content" data-tab="welcome" style="display:none">
+      <div class="welcome">
+        <h3>Welcome to Pulse</h3>
+        <p>Connect to claude.ai to start monitoring your usage in real time. No servers, no telemetry &mdash; everything stays local.</p>
+      </div>
+      <button class="login-hero" onclick="startLogin()">
+        <div class="login-hero-icon"><svg><use href="#i-login"/></svg></div>
+        <div class="login-hero-text">
+          <div class="login-hero-title">Log in with Claude</div>
+          <div class="login-hero-sub">opens a secure window &rarr;</div>
+        </div>
+      </button>
+      <div class="login-divider">or configure manually</div>
+      <div style="text-align:center">
+        <button class="modal-btn" onclick="switchTab('profile')">Manual setup &rarr;</button>
+      </div>
+    </div>
+
+    <div class="modal-tabs" id="modalTabs">
+      <div class="modal-tab active" data-tab="profile">Profile</div>
+      <div class="modal-tab" data-tab="profiles">Accounts</div>
+      <div class="modal-tab" data-tab="about">About</div>
+    </div>
+
+    <div class="modal-status" id="modalStatus"></div>
+    <div id="loginProgress" style="display:none"></div>
+
+    <div class="tab-content" data-tab="profile">
+      <button class="login-hero" onclick="startLogin()">
+        <div class="login-hero-icon"><svg><use href="#i-login"/></svg></div>
+        <div class="login-hero-text">
+          <div class="login-hero-title">Log in with Claude</div>
+          <div class="login-hero-sub">recommended &mdash; 1 click</div>
+        </div>
+      </button>
+
+      <details>
+        <summary>Manual setup &#9662;</summary>
+        <div class="modal-field"><label>Profile name</label><input type="text" id="sf-name" placeholder="Personal"></div>
+        <div class="modal-field">
+          <label>Session cookie</label>
+          <input type="password" id="sf-session" placeholder="sk-ant-sid02-...">
+          <div class="modal-hint">claude.ai &rarr; F12 &rarr; Application &rarr; Cookies &rarr; <code>sessionKey</code></div>
+        </div>
+        <div class="modal-field">
+          <label>Organization ID</label>
+          <input type="text" id="sf-org" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+          <div class="modal-hint">console: <code>fetch('/api/organizations').then(r=&gt;r.json()).then(o=&gt;console.log(o[0].uuid))</code></div>
+        </div>
+        <div class="modal-field">
+          <label>CF Clearance <span style="opacity:.6">(optional)</span></label>
+          <input type="password" id="sf-cf">
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn" onclick="testProfile()">Test</button>
+          <button class="modal-btn primary" onclick="saveProfile()">Save</button>
+        </div>
+      </details>
+
+      <div class="modal-buttons">
+        <button class="modal-btn" onclick="closeSettings()">Close</button>
+      </div>
+    </div>
+
+    <div class="tab-content" data-tab="profiles" style="display:none">
+      <div class="profile-list" id="profileList"></div>
+      <div class="modal-buttons">
+        <button class="modal-btn" onclick="closeSettings()">Close</button>
+        <button class="modal-btn primary" onclick="newProfile()">+ Add account</button>
+      </div>
+    </div>
+
+    <div class="tab-content" data-tab="about" style="display:none">
+      <div class="startup-card" id="startupCard">
+        <div class="startup-row">
+          <div class="startup-text">
+            <div class="startup-title">Start with Windows</div>
+            <div class="startup-sub">Launch Claude Pulse automatically at sign-in</div>
+          </div>
+          <label class="tgl" title="Toggle autostart">
+            <input type="checkbox" id="autostartToggle">
+            <span class="tgl-track"><span class="tgl-thumb"></span></span>
+          </label>
+        </div>
+        <details style="margin-top:8px;border:none;padding:0">
+          <summary style="font-size:9px;letter-spacing:.1em">Diagnostics</summary>
+          <div id="startupDiag" style="font-family:var(--mono);font-size:9px;color:var(--ink2);line-height:1.6;margin-top:4px;word-break:break-all"></div>
+        </details>
+      </div>
+
+      <div class="tray-tip-card">
+        <div class="tray-tip-title">Always-visible tray icon</div>
+        <div class="tray-tip-body">
+          Windows hides new tray icons by default. To pin Claude Pulse to your taskbar:
+          <ol class="tray-tip-steps">
+            <li>Click the <b>^</b> arrow on your taskbar</li>
+            <li>Drag the Claude Pulse <b>&#x2726;</b> icon out onto the taskbar</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-row"><span class="k">Version</span><span class="v">1.0.0</span></div>
+        <div class="about-row"><span class="k">Toggle</span><span class="v">Ctrl+Shift+C</span></div>
+        <div class="about-row"><span class="k">Reload</span><span class="v">Ctrl+Shift+R</span></div>
+        <div class="about-row"><span class="k">Config</span><span class="v">~/.claude-pulse/</span></div>
+      </div>
+      <p style="font-size:10.5px;color:var(--ink2);line-height:1.55;margin-bottom:4px">
+        Unofficial third-party tool. Not affiliated with Anthropic PBC. All data stays on your machine.
+      </p>
+      <div class="modal-buttons"><button class="modal-btn" onclick="closeSettings()">Close</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== STATE ===================== */
+var CIRC = 2 * Math.PI * 58;
+var LBL = {session:"session",allModels:"weekly all",sonnetOnly:"sonnet",claudeDesign:"design",monthly:"monthly"};
+var TITLES = {session:"5-hour session",allModels:"Weekly \u00b7 all models",sonnetOnly:"Weekly \u00b7 Sonnet",claudeDesign:"Weekly \u00b7 Claude Design",monthly:"Monthly spend"};
+var sel = "session";
+var editingId = null;
+var data = null;
+
+/* ===================== HELPERS ===================== */
+function colorFor(v){
+  var style = getComputedStyle(document.body);
+  if(v>=0.9) return style.getPropertyValue("--bad").trim();
+  if(v>=0.7) return style.getPropertyValue("--warn").trim();
+  return style.getPropertyValue("--accent").trim();
+}
+function pctClass(v){
+  if(v>=0.9) return "bad";
+  if(v>=0.7) return "warn";
+  return "ok";
+}
+function timeUntil(iso){
+  if(!iso) return "--";
+  var d = new Date(iso) - new Date();
+  if(d<=0) return "now";
+  var h = Math.floor(d/3600000), m = Math.floor((d%3600000)/60000);
+  var dd = Math.floor(h/24);
+  if(dd>0) return dd+"d "+(h%24)+"h";
+  if(h>0) return h+"h "+m+"m";
+  return m+"m";
+}
+function trendText(v){
+  if(v>=0.9) return "critical";
+  if(v>=0.7) return "hot";
+  if(v>=0.4) return "on pace";
+  return "under";
+}
+
+/* mini bar updates: 5 bars from low to high, fill based on v */
+function updateMiniBar(k, v){
+  var bars = document.querySelectorAll('.mini-bar[data-bar="'+k+'"] i');
+  var threshold = v * bars.length;
+  bars.forEach(function(b,i){
+    var filled = i < threshold;
+    b.style.height = (30 + i*14) + "%";
+    if(filled){
+      b.style.opacity = "1";
+      b.style.background = v>=0.9 && i>=bars.length-1 ? "var(--bad)" : (v>=0.7 ? "var(--warn)" : "var(--accent)");
+    }else{
+      b.style.opacity = "0.22";
+      b.style.background = "var(--ink3)";
+    }
+  });
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  if(!data) return;
+
+  /* hero dial uses "sel" — for session/allModels/sonnetOnly/claudeDesign we show .used;
+     for monthly we show monthly.used */
+  var c = data[sel] || data.session || {};
+  var v = c.used || 0;
+  var color = colorFor(v);
+
+  // dial
+  document.getElementById("num").textContent = Math.round(v*100);
+  document.getElementById("num").style.color = color;
+  document.getElementById("lbl").textContent = LBL[sel] || "";
+  var bar = document.getElementById("bar");
+  bar.style.stroke = color;
+  bar.style.strokeDashoffset = CIRC * (1 - v);
+
+  document.getElementById("selName").textContent = (LBL[sel]||"").toUpperCase();
+  document.getElementById("heroTitle").textContent = TITLES[sel] || "";
+
+  // reset pill
+  var resetTxt = document.getElementById("resetTxt");
+  var pill = document.getElementById("resetPill");
+  var compactReset = document.getElementById("compactReset");
+  var compactResetTxt = document.getElementById("compactResetTxt");
+  if(c.resetsAt){
+    var tu = timeUntil(c.resetsAt);
+    resetTxt.textContent = tu;
+    if(compactResetTxt) compactResetTxt.textContent = "resets " + tu;
+    pill.style.display = "inline-flex";
+    if(compactReset) compactReset.style.removeProperty("display");
+  }else{
+    pill.style.display = "none";
+    if(compactReset) compactReset.style.display = "none";
+  }
+
+  // prediction (session only)
+  var predEl = document.getElementById("pred");
+  if(sel==="session" && data.prediction && data.prediction.text){
+    predEl.textContent = "\u2197 " + data.prediction.text;
+    predEl.classList.add("show");
+  }else{
+    predEl.classList.remove("show");
+  }
+
+  // rows
+  ["session","allModels","sonnetOnly","claudeDesign"].forEach(function(k){
+    var row = data[k]; if(!row) return;
+    var pctEl = document.getElementById("rp-"+k);
+    pctEl.textContent = Math.round(row.used*100) + "%";
+    pctEl.className = "row-pct " + pctClass(row.used);
+    document.getElementById("rs-"+k).textContent = "resets in " + timeUntil(row.resetsAt);
+    var trendEl = document.getElementById("rt-"+k);
+    if(trendEl) trendEl.textContent = trendText(row.used);
+    updateMiniBar(k, row.used);
+    var rowEl = document.querySelector('.row[data-k="'+k+'"]');
+    if(rowEl) rowEl.classList.toggle("active", k===sel);
+  });
+
+  // segmented
+  document.querySelectorAll("#seg button").forEach(function(b){
+    b.classList.toggle("active", b.dataset.k===sel);
+  });
+
+  // monthly
+  if(data.monthly){
+    var spent = (data.monthly.spent||0).toFixed(2);
+    var limit = (data.monthly.limit||0).toFixed(0);
+    document.getElementById("m-spent").innerHTML = "\u20AC"+spent+'<span class="limit"> / \u20AC'+limit+"</span>";
+    var mPct = Math.min(100, (data.monthly.used||0)*100);
+    var mBar = document.getElementById("m-bar");
+    mBar.style.width = mPct + "%";
+    mBar.style.background = colorFor(data.monthly.used||0);
+    document.getElementById("m-pace").textContent = "PACE \u00b7 " + trendText(data.monthly.used||0).toUpperCase();
+    if(data.monthly.resetsAt){
+      document.getElementById("m-days").textContent = timeUntil(data.monthly.resetsAt) + " left";
+    }else{
+      document.getElementById("m-days").textContent = "";
+    }
+  }
+
+  // plan
+  if(data.plan) document.getElementById("plan").textContent = String(data.plan).toUpperCase();
+
+  // warn
+  var w = document.getElementById("warn");
+  if(data.sessionExpired) w.classList.add("show"); else w.classList.remove("show");
+
+  scheduleResize();
+}
+
+/* ===================== FETCH ===================== */
+function setSyncTime(text){
+  document.getElementById("sync").textContent = text;
+  var sm = document.querySelector(".brand-name small");
+  if(sm) sm.setAttribute("data-time", text);
+}
+function fetchUsage(){
+  fetch("/usage",{cache:"no-store"}).then(function(r){
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  }).then(function(j){
+    data = j;
+    document.getElementById("dot").classList.remove("err");
+    setSyncTime(new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
+    render();
+  }).catch(function(){
+    document.getElementById("dot").classList.add("err");
+    setSyncTime("offline");
+  });
+}
+
+function fetchHistory(){
+  fetch("/history").then(function(r){return r.json();}).then(function(j){
+    drawHistory(j.points||[]);
+    scheduleResize();
+  }).catch(function(){});
+}
+
+function drawHistory(points){
+  var svg=document.getElementById("historySvg");
+  var empty=document.getElementById("historyEmpty");
+  svg.innerHTML="";
+  if(points.length<2){svg.style.display="none";empty.style.display="block";return;}
+  svg.style.display="block";empty.style.display="none";
+  var W=240,H=60,now=Date.now()/1000,start=now-7*86400;
+  function x(t){return ((t-start)/(now-start))*W;}
+  function y(v){return H-v*(H-4)-2;}
+  var style=getComputedStyle(document.body);
+  var accent=style.getPropertyValue("--accent").trim();
+  var ink2=style.getPropertyValue("--ink2").trim();
+
+  [H*0.75,H*0.5,H*0.25].forEach(function(yy){
+    var l=document.createElementNS("http://www.w3.org/2000/svg","line");
+    l.setAttribute("x1","0");l.setAttribute("x2",W);l.setAttribute("y1",yy);l.setAttribute("y2",yy);
+    l.setAttribute("stroke","currentColor");l.setAttribute("stroke-width","0.4");
+    l.setAttribute("stroke-dasharray","1,3");l.setAttribute("opacity","0.25");
+    svg.appendChild(l);
+  });
+
+  ["weekly","session"].forEach(function(key){
+    var color=key==="session"?accent:ink2;
+    var pts=points.filter(function(p){return p[key]!==undefined;});
+    if(pts.length<2) return;
+    if(key==="session"){
+      var d = "M"+x(pts[0].ts)+","+H+" ";
+      pts.forEach(function(p){d += "L"+x(p.ts)+","+y(p.session)+" ";});
+      d += "L"+x(pts[pts.length-1].ts)+","+H+" Z";
+      var area=document.createElementNS("http://www.w3.org/2000/svg","path");
+      area.setAttribute("d",d);area.setAttribute("fill",color);area.setAttribute("opacity","0.12");
+      svg.appendChild(area);
+    }
+    var line=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+    line.setAttribute("points", pts.map(function(p){return x(p.ts)+","+y(p[key]);}).join(" "));
+    line.setAttribute("fill","none");line.setAttribute("stroke",color);
+    line.setAttribute("stroke-width","1.6");line.setAttribute("stroke-linejoin","round");
+    line.setAttribute("stroke-linecap","round");
+    svg.appendChild(line);
+  });
+}
+
+/* ===================== INTERACTIONS ===================== */
+document.querySelectorAll("#seg button").forEach(function(b){
+  b.addEventListener("click",function(){sel=b.dataset.k;render();});
+});
+document.querySelectorAll(".row").forEach(function(r){
+  r.addEventListener("click",function(){sel=r.dataset.k;render();});
+});
+
+/* ===================== UI STATE ===================== */
+var uiState = { theme:"copper", dark:false, compact:false, showHistory:false };
+
+function applyStyles(){
+  var cls = (uiState.dark?"dark ":"")+(uiState.compact?"compact ":"")+"theme-"+uiState.theme;
+  document.body.className = cls;
+  document.querySelectorAll(".theme-swatch").forEach(function(s){
+    s.classList.toggle("active", s.dataset.theme===uiState.theme);
+  });
+  document.getElementById("historyCard").classList.toggle("show", uiState.showHistory && !uiState.compact);
+  document.getElementById("compactBtn").classList.toggle("active", uiState.compact);
+  document.getElementById("historyBtn").classList.toggle("active", uiState.showHistory);
+  document.getElementById("darkBtn").classList.toggle("active", uiState.dark);
+  var iu = document.querySelector("#darkIcon use");
+  if(iu) iu.setAttribute("href", uiState.dark?"#i-sun":"#i-moon");
+  if(data){ render(); }
+  scheduleResize();
+}
+
+function saveUIState(){
+  try{ fetch("/ui-state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(uiState)}); }catch(e){}
+}
+
+fetch("/ui-state").then(function(r){return r.json();}).then(function(s){
+  uiState = Object.assign(uiState,s);
+  applyStyles();
+  if(uiState.showHistory) fetchHistory();
+}).catch(function(){ applyStyles(); });
+
+document.getElementById("darkBtn").addEventListener("click",function(){uiState.dark=!uiState.dark;applyStyles();saveUIState();});
+document.getElementById("compactBtn").addEventListener("click",function(){uiState.compact=!uiState.compact;applyStyles();saveUIState();});
+document.getElementById("compactExitBtn").addEventListener("click",function(){uiState.compact=false;applyStyles();saveUIState();});
+document.getElementById("compactCloseBtn").addEventListener("click",function(){if(window.electronAPI&&window.electronAPI.hideWindow){window.electronAPI.hideWindow();}});
+document.getElementById("historyBtn").addEventListener("click",function(){uiState.showHistory=!uiState.showHistory;applyStyles();saveUIState();if(uiState.showHistory)fetchHistory();});
+document.getElementById("themeBtn").addEventListener("click",function(e){e.stopPropagation();document.getElementById("themePicker").classList.toggle("show");});
+document.addEventListener("click",function(e){
+  if(!e.target.closest("#themePicker")&&!e.target.closest("#themeBtn")){document.getElementById("themePicker").classList.remove("show");}
+});
+document.querySelectorAll(".theme-swatch").forEach(function(s){
+  s.addEventListener("click",function(){uiState.theme=s.dataset.theme;applyStyles();saveUIState();document.getElementById("themePicker").classList.remove("show");if(uiState.showHistory)fetchHistory();});
+});
+
+document.getElementById("closeBtn").addEventListener("click",function(){
+  if(window.electronAPI&&window.electronAPI.hideWindow) window.electronAPI.hideWindow();
+});
+
+/* ===================== RESIZE ===================== */
+var lastSent = {w:0,h:0}, resizeTimer=null;
+function measureAndReport(){
+  if(!window.electronAPI || !window.electronAPI.resizeTo) return;
+  var modalOpen = document.getElementById("settingsModal").classList.contains("show");
+  if(modalOpen){
+    var mw=330,mh=540;
+    if(Math.abs(mw-lastSent.w)<2 && Math.abs(mh-lastSent.h)<2) return;
+    lastSent={w:mw,h:mh}; window.electronAPI.resizeTo({width:mw,height:mh}); return;
+  }
+  var app=document.getElementById("app"); if(!app) return;
+  var rect=app.getBoundingClientRect();
+  var w=Math.ceil(rect.width), h=Math.ceil(rect.height);
+  if(uiState.compact){ w=Math.max(w,220); w=Math.min(w,260); h=Math.max(h,80);} else { w=Math.max(w,300); w=Math.min(w,340); }
+  if(Math.abs(w-lastSent.w)<2 && Math.abs(h-lastSent.h)<2) return;
+  lastSent={w:w,h:h}; window.electronAPI.resizeTo({width:w,height:h});
+}
+function scheduleResize(){ if(resizeTimer) clearTimeout(resizeTimer); resizeTimer=setTimeout(measureAndReport,60); }
+if(window.ResizeObserver){ var ro=new ResizeObserver(function(){scheduleResize();}); ro.observe(document.getElementById("app")); ro.observe(document.body); }
+window.addEventListener("load",function(){setTimeout(measureAndReport,100);});
+
+/* ===================== LOGIN ===================== */
+function startLogin(){
+  if(!window.electronAPI || !window.electronAPI.startAutoLogin){
+    setProgress({phase:"err",message:"Auto-login not available"}); return;
+  }
+  var name="Personal";
+  var ni=document.getElementById("sf-name");
+  if(ni && ni.value.trim()) name=ni.value.trim();
+  setProgress({phase:"starting",message:"Opening secure login window..."});
+  window.electronAPI.startAutoLogin({profileName:name});
+}
+function setProgress(st){
+  var el=document.getElementById("loginProgress");
+  if(!st || !st.phase){el.style.display="none"; el.innerHTML=""; return;}
+  var cls="login-progress", spin=true;
+  if(st.phase==="success"||st.phase==="ok"){cls+=" ok"; spin=false;}
+  else if(st.phase==="err"||st.phase==="cancelled"){cls+=" err"; spin=false;}
+  el.className=cls; el.style.display="flex";
+  el.innerHTML = (spin?'<div class="login-spin"></div>':'') + '<div class="login-progress-text">'+(st.message||"")+'</div>';
+  scheduleResize();
+  if(st.phase==="success"){setTimeout(function(){setProgress(null);closeSettings();loadProfiles();fetchUsage();},1800);}
+}
+if(window.electronAPI && window.electronAPI.onLoginStatus){
+  window.electronAPI.onLoginStatus(function(s){setProgress(s);});
+}
+
+/* ===================== PROFILES ===================== */
+function loadProfiles(){
+  fetch("/config").then(function(r){return r.json();}).then(function(c){
+    var s=document.getElementById("profileSel"); s.innerHTML="";
+    (c.profiles||[]).forEach(function(p){
+      var o=document.createElement("option"); o.value=p.id; o.textContent=p.name;
+      if(p.id===c.activeProfile) o.selected=true;
+      s.appendChild(o);
+    });
+    renderProfileList(c);
+  }).catch(function(){});
+}
+function renderProfileList(c){
+  var list=document.getElementById("profileList"); list.innerHTML="";
+  (c.profiles||[]).forEach(function(p){
+    var item=document.createElement("div");
+    item.className="profile-item"+(p.id===c.activeProfile?" active":"");
+    item.innerHTML='<span>'+p.name+'</span><div class="profile-actions"><button onclick="editProfile(\''+p.id+'\')">\u270E</button><button onclick="deleteProfile(\''+p.id+'\')">\u2715</button></div>';
+    list.appendChild(item);
+  });
+}
+document.getElementById("profileSel").addEventListener("change",function(e){
+  fetch("/config/active",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:e.target.value})})
+    .then(function(){setTimeout(fetchUsage,500);});
+});
+
+function openSettings(){
+  editingId=null; setProgress(null);
+  fetch("/config").then(function(r){return r.json();}).then(function(c){
+    var has = c.profiles && c.profiles.length>0;
+    var active=(c.profiles||[]).find(function(p){return p.id===c.activeProfile;});
+    if(active){
+      editingId=active.id;
+      document.getElementById("sf-name").value=active.name;
+      document.getElementById("sf-session").value=active.sessionCookie;
+      document.getElementById("sf-org").value=active.orgId;
+      document.getElementById("sf-cf").value=active.cfClearance||"";
+    }else{
+      document.getElementById("sf-name").value="Personal";
+      document.getElementById("sf-session").value="";
+      document.getElementById("sf-org").value="";
+      document.getElementById("sf-cf").value="";
+    }
+    renderProfileList(c);
+    document.getElementById("modalStatus").className="modal-status";
+    document.getElementById("settingsModal").classList.add("show");
+    if(!has){
+      document.getElementById("modalTitle").innerHTML='Setup';
+      document.getElementById("modalTabs").style.display="none";
+      switchTab("welcome");
+    }else{
+      document.getElementById("modalTitle").innerHTML='Settings';
+      document.getElementById("modalTabs").style.display="flex";
+      switchTab("profile");
+    }
+    scheduleResize();
+  }).catch(function(){
+    document.getElementById("settingsModal").classList.add("show");
+    switchTab("profile");
+    scheduleResize();
+  });
+}
+function closeSettings(){document.getElementById("settingsModal").classList.remove("show"); setProgress(null); scheduleResize();}
+function switchTab(tab){
+  document.querySelectorAll(".modal-tab").forEach(function(t){t.classList.toggle("active",t.dataset.tab===tab);});
+  document.querySelectorAll(".tab-content").forEach(function(t){t.style.display=(t.dataset.tab===tab)?"":"none";});
+  if(tab==="about") refreshAutostartToggle();
+}
+document.querySelectorAll(".modal-tab").forEach(function(t){t.addEventListener("click",function(){switchTab(t.dataset.tab);});});
+
+function getForm(){
+  return {
+    id:editingId,
+    name:document.getElementById("sf-name").value.trim()||"Profile",
+    sessionCookie:document.getElementById("sf-session").value.trim(),
+    orgId:document.getElementById("sf-org").value.trim(),
+    cfClearance:document.getElementById("sf-cf").value.trim(),
+  };
+}
+function setStatus(msg,ok){var el=document.getElementById("modalStatus"); el.textContent=msg; el.className="modal-status "+(ok?"ok":"err");}
+function testProfile(){
+  setStatus("Testing connection...",true);
+  fetch("/config/test",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(getForm())})
+    .then(function(r){return r.json();}).then(function(j){
+      if(j.ok) setStatus("\u2713 Connected \u2014 "+(j.plan||""),true);
+      else setStatus("\u2717 "+(j.error||""),false);
+    }).catch(function(e){setStatus("\u2717 "+e.message,false);});
+}
+function saveProfile(){
+  fetch("/config/profile",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(getForm())})
+    .then(function(r){return r.json();}).then(function(j){
+      if(j.ok){setStatus("\u2713 Saved",true); setTimeout(function(){closeSettings();loadProfiles();fetchUsage();},800);}
+      else setStatus("\u2717 "+(j.error||""),false);
+    });
+}
+function newProfile(){
+  editingId=null;
+  ["sf-name","sf-session","sf-org","sf-cf"].forEach(function(id){document.getElementById(id).value="";});
+  switchTab("profile");
+}
+function editProfile(id){
+  fetch("/config").then(function(r){return r.json();}).then(function(c){
+    var p=(c.profiles||[]).find(function(x){return x.id===id;}); if(!p) return;
+    editingId=p.id;
+    document.getElementById("sf-name").value=p.name;
+    document.getElementById("sf-session").value=p.sessionCookie;
+    document.getElementById("sf-org").value=p.orgId;
+    document.getElementById("sf-cf").value=p.cfClearance||"";
+    switchTab("profile");
+  });
+}
+function deleteProfile(id){
+  if(!confirm("Delete this account?")) return;
+  fetch("/config/delete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id})})
+    .then(function(){loadProfiles();fetchUsage();});
+}
+
+document.getElementById("settingsBtn").addEventListener("click",function(){openSettings();});
+
+/* ===================== AUTOSTART TOGGLE ===================== */
+function refreshAutostartToggle(){
+  var cb = document.getElementById("autostartToggle");
+  var card = document.getElementById("startupCard");
+  var diag = document.getElementById("startupDiag");
+  if(!cb) return;
+  if(!window.electronAPI || !window.electronAPI.getAutostart){
+    if(card) card.style.display = "none";
+    return;
+  }
+  window.electronAPI.getAutostart().then(function(s){
+    cb.checked = !!(s && s.enabled);
+    var portable = s && s.portable;
+    cb.disabled = !!portable;
+    if(card) card.classList.toggle("disabled", !!portable);
+    var sub = card && card.querySelector(".startup-sub");
+    if(sub){
+      if(portable){
+        sub.textContent = "Not available in portable mode \u2014 install with the setup .exe.";
+      }else if(s.enabled){
+        var parts = [];
+        if(s.registry) parts.push("registry");
+        if(s.shortcut) parts.push("startup folder");
+        sub.textContent = "Active via " + parts.join(" + ");
+      }else{
+        sub.textContent = "Launch Claude Pulse automatically at sign-in";
+      }
+    }
+    if(diag){
+      diag.innerHTML =
+        '<div>Registry: <b>'+(s.registry?'\u2713':'\u2717')+'</b></div>'+
+        '<div>Startup folder: <b>'+(s.shortcut?'\u2713':'\u2717')+'</b></div>'+
+        '<div>Path: <code>'+(s.execPath||'(unknown)')+'</code></div>';
+    }
+  }).catch(function(){ cb.checked = false; });
+}
+document.getElementById("autostartToggle").addEventListener("change", function(e){
+  if(!window.electronAPI || !window.electronAPI.setAutostart) return;
+  window.electronAPI.setAutostart(e.target.checked).then(function(res){
+    if(res && res.ok){
+      e.target.checked = !!res.enabled;
+    }else{
+      e.target.checked = !e.target.checked;
+      if(res && res.portable) e.target.disabled = true;
+    }
+    refreshAutostartToggle();
+  }).catch(function(){ e.target.checked = !e.target.checked; });
+});
+
+/* first-run welcome */
+fetch("/config").then(function(r){return r.json();}).then(function(c){
+  if(!c.profiles||c.profiles.length===0) openSettings();
+}).catch(function(){});
+
+/* boot */
+loadProfiles();
+fetchUsage();
+refreshAutostartToggle();
+setInterval(fetchUsage,60000);
+setInterval(function(){if(uiState.showHistory)fetchHistory();},300000);
+</script>
+
+</body>
+</html>

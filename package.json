@@ -1,0 +1,88 @@
+{
+  "name": "claude-pulse",
+  "version": "1.0.0",
+  "description": "Your Claude usage, at a glance. A beautiful Windows tray widget.",
+  "main": "main.js",
+  "author": "L\u00e1szl\u00f3 F\u00fcl\u00f6p",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build:proxy": "python -m PyInstaller --onefile --noconsole --name proxy --add-data \"widget.html;.\" proxy.py",
+    "build:proxy:clean": "rimraf build dist proxy.spec",
+    "prebuild": "npm run build:proxy:clean && npm run build:proxy && node scripts/copy-proxy.js",
+    "build": "npm run prebuild && electron-builder --win --x64",
+    "build:installer": "npm run prebuild && electron-builder --win --x64",
+    "build:all": "npm run prebuild && electron-builder --win --x64"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3",
+    "rimraf": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.claude.pulse",
+    "productName": "Claude Pulse",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "icon.png",
+      "icon.ico",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dist-proxy/proxy.exe",
+        "to": "proxy.exe"
+      },
+      {
+        "from": "widget.html",
+        "to": "widget.html"
+      },
+      {
+        "from": "icon.png",
+        "to": "icon.png"
+      },
+      {
+        "from": "icon.ico",
+        "to": "icon.ico"
+      },
+      {
+        "from": "tray-icon-32.png",
+        "to": "tray-icon-32.png"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}

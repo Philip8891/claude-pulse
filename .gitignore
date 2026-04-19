@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-proxy/
+release/
+build/
+*.spec
+*.log
+.env
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
