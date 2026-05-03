@@ -188,14 +188,18 @@ def fetch_claude_usage(profile=None):
             alerts.append({"type": "session_expired"})
         raise
 
+    def _num(d, key, default=0):
+        v = d.get(key, default)
+        return v if v is not None else default
+
     fh = raw.get("five_hour") or {}
     sd = raw.get("seven_day") or {}
     sonnet = raw.get("seven_day_sonnet") or {}
     design = raw.get("seven_day_omelette") or {}
     ex = raw.get("extra_usage") or {}
-    spent_eur = ex.get("used_credits", 0) / 100
-    limit_eur = ex.get("monthly_limit", 4000) / 100
-    session_used = fh.get("utilization", 0) / 100
+    spent_eur = _num(ex, "used_credits", 0) / 100
+    limit_eur = _num(ex, "monthly_limit", 4000) / 100
+    session_used = _num(fh, "utilization", 0) / 100
 
     if profile is get_active_profile():
         short_history.append((time.time(), session_used))
@@ -203,10 +207,10 @@ def fetch_claude_usage(profile=None):
     return {
         "profile": {"id": profile["id"], "name": profile["name"]},
         "session": {"used": session_used, "resetsAt": fh.get("resets_at", "")},
-        "allModels": {"used": sd.get("utilization", 0) / 100, "resetsAt": sd.get("resets_at", "")},
-        "sonnetOnly": {"used": sonnet.get("utilization", 0) / 100, "resetsAt": sonnet.get("resets_at", "")},
-        "claudeDesign": {"used": design.get("utilization", 0) / 100, "resetsAt": design.get("resets_at", "")},
-        "monthly": {"used": ex.get("utilization", 0) / 100, "spent": round(spent_eur, 2), "limit": round(limit_eur, 2)},
+        "allModels": {"used": _num(sd, "utilization", 0) / 100, "resetsAt": sd.get("resets_at", "")},
+        "sonnetOnly": {"used": _num(sonnet, "utilization", 0) / 100, "resetsAt": sonnet.get("resets_at", "")},
+        "claudeDesign": {"used": _num(design, "utilization", 0) / 100, "resetsAt": design.get("resets_at", "")},
+        "monthly": {"used": _num(ex, "utilization", 0) / 100, "spent": round(spent_eur, 2), "limit": round(limit_eur, 2)},
         "plan": "Max (5x)",
         "lastSync": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "prediction": calculate_prediction(session_used),
